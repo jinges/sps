@@ -24,6 +24,10 @@ const userObj = {
 			ctx.body = '用户名或密码错误！'
 		}
 	},
+	userinf: async ctx => {
+		const req = ctx.request.body;
+		
+	},
 	search: async (data) => {
 		const result = User.find(data);
 		return result;
