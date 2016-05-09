@@ -2,9 +2,10 @@
 import user from './user'
 import sm from './sm'
 
-const Router = [user, sm]
 
 export default (app)=>{
+	const Router = [user, sm]
+	
 	Router.forEach((route)=>{
 		app
 			.use(route.routes())

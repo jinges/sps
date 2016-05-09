@@ -1,13 +1,20 @@
+import mongoose from 'mongoose'
+
 import md5 from 'md5'
+import userSchema from '../models/user'
 
-import User from '../models/user'
 
+const User  = mongoose.model('User', userSchema(mongoose.Schema));
+const ObjectId = mongoose.Types.ObjectId;
 
 const userObj = {
 	regist: async ctx => {
 		try{
 			const req = ctx.request.body;
 			req.password = md5(req.password);
+			console.log(ctx.cookies.get('code'));
+			console.log(req);
+
 			ctx.body = await new User(req).save()
 		}catch(err){
 			ctx.body = err;
@@ -15,9 +22,11 @@ const userObj = {
 	},
 	login: async ctx => {
 		const req = ctx.request.body;
-		const data = {'username': req.username, 'password': md5(req.password)};
+		const data = {'name': req.name, 'password': md5(req.password)};
 		const result = await userObj.search(data);
-		console.log(result);
+
+		console.log(ObjectId(result[0].id).getTimestamp());
+		// console.log(await userObj.search({'_id': ObjectId(result[0].id)}));
 		if(result.length) {
 			ctx.body = '登录成功！'
 		} else {
