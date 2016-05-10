@@ -11,9 +11,12 @@ const userObj = {
 	regist: async ctx => {
 		try{
 			const req = ctx.request.body;
+			const code = ctx.cookies.get('code');
+			if(code != req.code) {
+				ctx.body = '验证码不正确';
+				return false;
+			}
 			req.password = md5(req.password);
-			console.log(ctx.cookies.get('code'));
-			console.log(req);
 
 			ctx.body = await new User(req).save()
 		}catch(err){
@@ -35,7 +38,19 @@ const userObj = {
 	},
 	userinf: async ctx => {
 		const req = ctx.request.body;
-		
+		ctx.body = req;
+	},
+	findPassord: async ctx=>{
+		const req = ctx.request.body;
+		if(req.password != req.rePassword) {
+			ctx.body="密码不一致";
+			return false;
+		}
+		req.password = md5(req.password);
+
+		const result = await userObj.update({}, {$set: {
+			password: req.password
+		}})
 	},
 	search: async (data) => {
 		const result = User.find(data);

@@ -8,6 +8,7 @@ export default {
 		
 		try{
 			const user = await User.search({'name': req.phone})
+
 			if(purpose == 'regist' && user.length) {
 				ctx.body = '该手机号码已注册。';
 				return false;
@@ -17,10 +18,9 @@ export default {
 			}
 			const code = (Math.random()*(999999-100000)+100000).toFixed(0);
 
-			// this.session.captcha = {
-			// 	code: code
-			// }
 			ctx.cookies.set('code', code)
+
+			console.log(code)
 			
 			ctx.body = '验证码已发送。'
 		} catch(err) {
