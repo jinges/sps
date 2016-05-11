@@ -3,7 +3,6 @@ import Router from 'koa-router'
 import {baseApi} from '../configer'
 import User from '../controllers/user'
 
-console.log(User);
 
 const router = new Router()
 
@@ -17,8 +16,10 @@ router.post('/login', User.login)
 router.get('/', async (ctx)=>{
 	ctx.body = 'hello'
 })
+//authenticate
+router.post('/authenticate', User.authenticate)
 //find_password
-router.post('/find_password', User.findPassord)
+router.post('/changepassword', User.changepassword)
 
 
 export default router

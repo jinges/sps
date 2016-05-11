@@ -16,11 +16,11 @@ export default {
 				ctx.body = '用户不存在。';
 				return false;
 			}
-			const code = (Math.random()*(999999-100000)+100000).toFixed(0);
+			const captcha = (Math.random()*(999999-100000)+100000).toFixed(0);
 
-			ctx.cookies.set('code', code)
+			console.log(ctx.app.session)
+			// ctx.session.captcha = captcha;
 
-			console.log(code)
 			
 			ctx.body = '验证码已发送。'
 		} catch(err) {

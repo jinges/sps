@@ -26,6 +26,7 @@ app.use(convert.compose(
 
 router(app);
 
+
 app.on('error', (err, ctx)=>{
     console.log(err);
     log.error('server error', err, ctx);
