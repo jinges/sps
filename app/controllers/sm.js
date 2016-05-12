@@ -1,3 +1,4 @@
+import session from 'koa-session'
 
 import User from './user'
 
@@ -18,8 +19,8 @@ export default {
 			}
 			const captcha = (Math.random()*(999999-100000)+100000).toFixed(0);
 
-			console.log(ctx.app.session)
-			// ctx.session.captcha = captcha;
+			session.captcha = captcha;
+			console.log(captcha);
 
 			
 			ctx.body = '验证码已发送。'

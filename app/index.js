@@ -21,7 +21,9 @@ app.use(convert.compose(
 	cros,
 	bodyParser(),
 	logger(),
-	session(app)
+	session({
+		key: ['uid','captcha']
+	},app)
 ))
 
 router(app);
