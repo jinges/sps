@@ -13,13 +13,11 @@ router.post('/regist', User.regist)
 //login
 router.post('/login', User.login)
 //userinf
-router.get('/', async (ctx)=>{
-	ctx.body = 'hello'
-})
+router.get('/userinfo', User.userinf)
 //authenticate
 router.post('/authenticate', User.authenticate)
-//find_password
-router.post('/changepassword', User.changepassword)
+//change_password
+router.post('/password', User.password)
 
 
 export default router

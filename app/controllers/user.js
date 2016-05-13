@@ -27,12 +27,11 @@ const userObj = {
 	login: async ctx => {
 		const req = ctx.request.body;
 		const data = {'name': req.name, 'password': md5(req.password)};
-		console.log(ctx.request.header);
 		try{
 			const result = await userObj.search(data);
 		
-			session.uid = ObjectId(result[0].id);
 			if(result.length) {
+				session.uid = result[0].id;
 				ctx.body = '登录成功！'
 			} else {
 				ctx.body = '用户名或密码错误！'
@@ -43,13 +42,27 @@ const userObj = {
 	},
 	logout: async ctx=>{
 		//清除session
-		//
 		session.uid = null;
 		ctx.body = "已退出登录";
 	},
 	userinf: async ctx => {
-		const req = ctx.request.body;
-		ctx.body = req;
+		console.log(session.uid);
+		const  data  = {'_id': ObjectId(session.uid)}
+		try{
+			const result = await userObj.search(data);
+		
+			if(!result.length) {
+				ctx.body = '用户已失效，请重新登录'
+				return false;
+			}
+			const data = result[0];
+			ctx.body = {
+				name: data.name,
+				gender: data.gender
+			}
+		} catch(err) {
+			ctx.body = '服务器异常';
+		}
 	},
 	authenticate: async ctx => {
 		try{
@@ -67,7 +80,7 @@ const userObj = {
 			ctx.body = '服务器异常';
 		}
 	},
-	changepassword: async ctx =>{
+	password: async ctx =>{
 		const req = ctx.request.body;
 
 		if(req.password != req.rePassword) {
@@ -82,7 +95,7 @@ const userObj = {
 			}});
 
 			if(result.ok) {
-				ctx.body = '修改成功'
+				ctx.body = '修改成功'	
 			} else {
 				ctx.body = '修改失败'
 			}
