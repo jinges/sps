@@ -6,9 +6,9 @@ export default {
 	captcha: async ctx => {
 		const req = ctx.request.body
 		const purpose = req.purpose
-		
+		console.log(req);
 		try{
-			const user = await User.search({'name': req.phone})
+			const user = await User.search({'name': req.name})
 
 			if(purpose == 'regist' && user.length) {
 				ctx.body = '该手机号码已注册。';
@@ -20,6 +20,8 @@ export default {
 			const captcha = (Math.random()*(999999-100000)+100000).toFixed(0);
 
 			session.captcha = captcha;
+
+			console.log(ctx.session);
 			console.log(captcha);
 
 			

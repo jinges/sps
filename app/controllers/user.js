@@ -12,14 +12,25 @@ const userObj = {
 	regist: async ctx => {
 		try{
 			const req = ctx.request.body;
-			const captcha = ctx.session.captcha;
+			const captcha = session.captcha;
+			console.log(captcha);
+			console.log(req.captcha);
 			if(captcha != req.captcha) {
 				ctx.body = '验证码不正确';
 				return false;
+			} else if(!req.password) {
+				ctx.body = '密码不能为空';
 			}
+			// const data = {'name': req.name};
+			// const result = await userObj.search(data);
+			// if(result.length) {
+			// 	ctx.body = '用户已存在';
+			// 	return false;
+			// }
 			req.password = md5(req.password);
 
-			ctx.body = await new User(req).save()
+			const result = await new User(req).save();
+			ctx.body = result[0].id;
 		}catch(err){
 			ctx.body = err;
 		}
@@ -30,13 +41,17 @@ const userObj = {
 		try{
 			const result = await userObj.search(data);
 		
-			if(result.length) {
-				session.uid = result[0].id;
-				ctx.body = '登录成功！'
-			} else {
+			if(!result.length) {
 				ctx.body = '用户名或密码错误！'
+				return false;
 			}
-		} catch(err) {
+
+			session.uid = result[0].id;
+			ctx.body = {
+				uid: session.uid,
+				msg: '登录成功'
+			}
+ 		} catch(err) {
 			ctx.body = '服务器异常';
 		}
 	},

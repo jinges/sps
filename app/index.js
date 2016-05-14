@@ -8,7 +8,7 @@ import mongoose from 'mongoose'
 import cros from './middleware/crosMiddleware'
 import pipeMiddleware from './middleware/pipeMiddleware'
 
-import router from './routes'
+import Router from './routes'
 import {port, mongodb} from './configer'
 
 mongoose.connect(mongodb)
@@ -26,7 +26,13 @@ app.use(convert.compose(
 	},app)
 ))
 
-router(app);
+Router.forEach((route)=>{
+	app
+		.use(route.routes())
+		.use(route.allowedMethods({
+			throw: true
+		}))
+})
 
 
 app.on('error', (err, ctx)=>{
