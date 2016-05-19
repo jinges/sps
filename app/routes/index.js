@@ -1,6 +1,6 @@
 
 import user from './user'
-import sm from './sm'
+import sms from './sms'
 
 
 // export default (app)=>{
@@ -15,4 +15,4 @@ import sm from './sm'
 // 	})
 // }
 
-export default [user, sm];
+export default [user, sms]

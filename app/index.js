@@ -2,7 +2,7 @@ import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import logger from 'koa-logger'
 import convert from 'koa-convert'
-import session from 'koa-session'
+import session from 'koa-session2'
 import mongoose from 'mongoose'
 
 import cros from './middleware/crosMiddleware'
@@ -22,8 +22,8 @@ app.use(convert.compose(
 	bodyParser(),
 	logger(),
 	session({
-		key: ['uid','captcha']
-	},app)
+	    key: "captcha"
+	})
 ))
 
 Router.forEach((route)=>{
@@ -33,7 +33,6 @@ Router.forEach((route)=>{
 			throw: true
 		}))
 })
-
 
 app.on('error', (err, ctx)=>{
     console.log(err);

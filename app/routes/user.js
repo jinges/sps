@@ -1,23 +1,20 @@
 import Router from 'koa-router'
 
 import {baseApi} from '../configer'
-import User from '../controllers/user'
-
+import {regist, login, userinf, password} from '../controllers/user'
 
 const router = new Router()
 
 router.prefix(`/${baseApi}/user`)
 
 //regist
-router.post('/regist', User.regist)
+router.post('/regist', regist)
 //login
-router.post('/login', User.login)
+router.post('/login', login)
 //userinf
-router.get('/userinfo', User.userinf)
-//authenticate
-router.post('/authenticate', User.authenticate)
+router.get('/userinfo', userinf)
 //change_password
-router.post('/password', User.password)
+router.post('/password', password)
 
 
 export default router
