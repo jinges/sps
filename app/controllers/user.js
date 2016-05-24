@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-// import session from 'koa-session2'
 
 import md5 from 'md5'
 import userSchema from '../models/user'

@@ -15,4 +15,4 @@ import sms from './sms'
 // 	})
 // }
 
-export default [user, sms]
+export default [user]

@@ -2,8 +2,10 @@ import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import logger from 'koa-logger'
 import convert from 'koa-convert'
-import session from 'koa-session2'
 import mongoose from 'mongoose'
+import passport from 'koa-passport'
+import session from 'koa-generic-session'
+import MongoStore from 'koa-generic-session-mongo'
 
 import cros from './middleware/crosMiddleware'
 import pipeMiddleware from './middleware/pipeMiddleware'
@@ -22,9 +24,12 @@ app.use(convert.compose(
 	bodyParser(),
 	logger(),
 	session({
-	    key: "captcha"
+	    store: new MongoStore()
 	})
 ))
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 Router.forEach((route)=>{
 	app
