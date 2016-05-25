@@ -1,32 +1,61 @@
 import mongoose from 'mongoose'
 
 import smsSchema from '../models/sms'
-
 import {finduser} from './user'
 
 
 const sms_model  = mongoose.model('SMS', smsSchema(mongoose.Schema));
 const ObjectId = mongoose.Types.ObjectId;
 
+export default class SMS{
+	constructor(){
+
+	}
+
+	async get(params){
+		return sms_model.find(params);
+	}
+
+	async post(params){
+		return new sms_model(params).save();
+	}
+}
+
+const sms = new SMS();
+
+export async function findSMS(params){
+	const result = await sms.get(params);
+	
+	return result.length? true: false;
+} 
+
 export async function captcha(ctx) {
 	const req = ctx.request.body
-	const purpose = req.purpose
+	const purpose = req.purpose //1：注册， 2：修改密码， 3：找回密码， 4：通知 
+	const  phone = req.name
 	try{
-		// const user = finduser({'name': req.name})
+		const user = await finduser({'name': req.name})
 
-		// if(purpose == 'regist' && user.length) {
-		// 	ctx.body = '该手机号码已注册。';
-		// 	return false;
-		// } else if(purpose == 'findpassword' && !user.length) {
-		// 	ctx.body = '用户不存在。';
-		// 	return false;
-		// }
+
+		if(purpose == 1 && user) {
+			ctx.body = '该手机号码已注册。';
+			return false;
+		} else if((purpose == 2 | purpose == 3) && user) {
+			ctx.body = '用户不存在。';
+			return false;
+		}
 		const captcha = (Math.random()*(999999-100000)+100000).toFixed(0);
 
 		console.log(captcha);
 
 		ctx.session.captcha = captcha;
-		console.log(ctx.session);
+
+		const result = 
+			await sms.post({
+				phone: req.name,
+				code: captcha,
+				purpose: purpose
+			});
 		
 		ctx.body = '验证码已发送。'
 	} catch(err) {

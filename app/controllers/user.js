@@ -31,30 +31,30 @@ export class User {
 
 const user = new User();
 
-export  function finduser(params) {
-	return user.get(params);
+export async function finduser(params) {
+	const result = await user.get(params)
+	return result.length? true: false;
 }
 
 export async function regist(ctx) {
 	try{
 		const req = ctx.request.body;
-		const captcha = await ctx.session.captcha;
+		const captcha = ctx.session.captcha;
 
-		console.log(ctx);
 		console.log(captcha);
 
-		// if(captcha != req.captcha) {
-		// 	ctx.body = '验证码不正确';
-		// 	return false;
-		// } else if(!req.password) {
-		// 	ctx.body = '密码不能为空';
-		// }
+		if(captcha != req.captcha) {
+			ctx.body = '验证码不正确';
+			return false;
+		} else if(!req.password) {
+			ctx.body = '密码不能为空';
+		}
 
 		req.password = md5(req.password);
 
 		const result = await user.post(req);
 	
-		ctx.body = result.id;
+		ctx.body = 'success';  //result.id;
 	}catch(err){
 		ctx.body = err;
 	}

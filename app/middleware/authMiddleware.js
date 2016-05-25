@@ -5,8 +5,8 @@ import {finduser} from '../controllers/user'
 
 const LocalStrategy = LocalStrategy.Strategy;
 passport.use(new LocalStrategy(
-	function (username, passport, done){
-		finduser({name: username, passport: passport}, function(err, user){
+	async function (name, passport, done){
+		finduser({name: name, passport: passport}, function(err, user){
 			if(err) {
 				return done(err)
 			}

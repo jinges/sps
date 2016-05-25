@@ -1,14 +1,12 @@
-import Router from 'koa-router'
-
 import {baseApi} from '../configer'
 import {captcha, authenticate} from '../controllers/sms'
 
-const router = new Router()
+export default (router)=>{
+	router.prefix(`/${baseApi}`)
 
-router.prefix(`/${baseApi}`)
+	router.post('/captcha', captcha)
+	//authenticate
+	router.post('/authenticate', authenticate)
 
-router.post('/captcha', captcha)
-//authenticate
-router.post('/authenticate', authenticate)
-
-export default router
+	return router;
+}

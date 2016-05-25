@@ -1,18 +1,20 @@
+import Router from 'koa-router'
+const router = new Router()
 
 import user from './user'
 import sms from './sms'
 
 
-// export default (app)=>{
-// 	const Router = [user, sm]
+export default (app)=>{
+	const Router = [user(router), sms(router)]
 	
-// 	Router.forEach((route)=>{
-// 		app
-// 			.use(route.routes())
-// 			.use(route.allowedMethods({
-// 				throw: true
-// 			}))
-// 	})
-// }
+	Router.forEach((route)=>{
+		app
+			.use(route.routes())
+			.use(route.allowedMethods({
+				throw: true
+			}))
+	})
 
-export default [user]
+	// app.use('/login', router)
+}
