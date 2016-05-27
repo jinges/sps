@@ -3,16 +3,16 @@ import passport from 'koa-passport'
 import {baseApi} from '../configer'
 import {regist, login, userinf, password} from '../controllers/user'
 
-export default (router)=>{
-	router.prefix(`/${baseApi}/user`)
+const router = require('koa-router')()
 
-	//regist
-	router.post('/regist', regist)
+router.prefix(`/${baseApi}/user`)
 
-	//userinf
-	router.get('/userinfo', userinf)
-	//change_password
-	router.post('/password', password)
+//regist
+router.post('/regist', regist)
 
-	return router;
-}
+//userinf
+router.get('/userinfo', userinf)
+//change_password
+router.post('/password', password)
+
+export default router

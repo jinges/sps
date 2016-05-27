@@ -1,16 +1,26 @@
 import passport from 'koa-passport'
-import LocalStrategy from 'passport-local'
-
 import {finduser} from '../controllers/user'
 
-const LocalStrategy = LocalStrategy.Strategy;
-passport.use(new LocalStrategy(
-	async function (name, passport, done){
-		finduser({name: name, passport: passport}, function(err, user){
-			if(err) {
-				return done(err)
-			}
-			return done(null, user);
-		})
-	}
-))
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  done(null, user);
+});
+
+const  LocalStrategy = require('passport-local').Strategy;
+passport.use(new LocalStrategy(function(name, passport, done) {
+	finduser({name: name, password: password}, done)
+}))
+
+
+
+const BasicStrategy = require('passport-http').BasicStrategy;
+passport.use(new BasicStrategy(function (name, password, done){
+		finduser({name: name, password: password}, done)
+}))
+
+
+exports.isAuthenticated = passport.authenticate('basic', { session : false });

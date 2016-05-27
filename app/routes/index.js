@@ -1,13 +1,13 @@
-import Router from 'koa-router'
-const router = new Router()
+const router = require('koa-router')()
 
 import user from './user'
 import sms from './sms'
 
 
+
+const Router = [user, sms]
+
 export default (app)=>{
-	const Router = [user(router), sms(router)]
-	
 	Router.forEach((route)=>{
 		app
 			.use(route.routes())
@@ -15,6 +15,4 @@ export default (app)=>{
 				throw: true
 			}))
 	})
-
-	// app.use('/login', router)
 }
