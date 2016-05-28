@@ -35,20 +35,7 @@ app.use(convert.compose(
 app.use(passport.initialize())
 app.use(passport.session())
 
-
 Router(app)
-
-router.post('/api/user/login', 
-	passport.authenticate('basic', {session: false}),
-	function(ctx){
-		console.log(ctx);
-		ctx.body = '123456';
-	}
-)
-
-app.use(router.routes(), router.allowedMethods());
-
-
 
 app.on('error', (err, ctx)=>{
     console.log(err);
