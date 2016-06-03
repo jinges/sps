@@ -5,7 +5,7 @@ import user from './user'
 import sms from './sms'
 
 
-const Router = [user, sms]
+const Router = [sms, user]
 
 
 export default (app)=>{

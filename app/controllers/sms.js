@@ -36,7 +36,6 @@ export async function captcha(ctx) {
 	try{
 		const user = await finduser({'name': req.name})
 
-
 		if(purpose == 1 && user) {
 			ctx.body = '该手机号码已注册。';
 			return false;
@@ -48,7 +47,9 @@ export async function captcha(ctx) {
 
 		console.log(captcha);
 
-		ctx.session.captcha = captcha;
+		ctx.session[req.name] = captcha;
+
+		ctx.cookies.set('phone', req.name);
 
 		const result = 
 			await sms.post({
@@ -57,6 +58,7 @@ export async function captcha(ctx) {
 				purpose: purpose
 			});
 		
+		// console.log(ctx.session)
 		ctx.body = '验证码已发送。'
 	} catch(err) {
 		ctx.body = '服务器异常';

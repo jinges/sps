@@ -7,23 +7,17 @@ import userSchema from '../models/user'
 const user_model  = mongoose.model('User', userSchema(mongoose.Schema));
 const ObjectId = mongoose.Types.ObjectId;
 
-function encrypt(obj) {
-	if(obj.password) {
-    	obj.password = md5(obj.password);
-    }
-}
-
 export class User {
 	constructor() {
         this.user = {};
     }
 
     async get (params) {
-    	return  user_model.find(encrypt(params));
+    	return  user_model.find(params);
     }
 
     async post (params) {
-    	return  new user_model(encrypt(params)).save();
+    	return  new user_model(params).save();
     }
 
     async put () {
@@ -39,7 +33,7 @@ const user = new User();
 
 export async function finduser(params) {
 	const result = await user.get(params)
-	return result;
+	return result.length? true: false;
 }
 
 export async function regist(ctx) {
@@ -47,7 +41,7 @@ export async function regist(ctx) {
 		const req = ctx.request.body;
 		const captcha = ctx.session.captcha;
 
-		console.log(captcha);
+		console.log(ctx.request);
 
 		if(captcha != req.captcha) {
 			ctx.body = '验证码不正确';
@@ -55,6 +49,8 @@ export async function regist(ctx) {
 		} else if(!req.password) {
 			ctx.body = '密码不能为空';
 		}
+
+		req.password = md5(req.password);
 
 		const result = await user.post(req);
 	
@@ -66,7 +62,7 @@ export async function regist(ctx) {
 
 export async function login (ctx){
 	const req = ctx.request.body;
-	const data = {'name': req.name, 'password': req.password};
+	const data = {'name': req.name, 'password': md5(req.password)};
 	try{
 		const result = await  user.get(data);
 	
@@ -92,6 +88,7 @@ export async function logout (ctx) {
 }
 
 export async function userinf (ctx) {
+	console.log(session.uid);
 	const  data  = {'_id': ObjectId(session.uid)}
 	try{
 		const result =  await user.get(data);

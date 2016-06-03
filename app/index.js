@@ -24,16 +24,18 @@ const router = require('koa-router')();
 app.keys = ['captcha']
 
 app.use(convert.compose(
-	cors(),
+	cors({
+		Origin: 'http://127.0.0.1:8080',
+		credentials: true
+	}),
 	bodyParser(),
 	logger(),
-	session({
-	    store: new MongoStore()
-	})
+	session(app)
 ))
 
-app.use(passport.initialize())
-app.use(passport.session())
+// app.use(passport.initialize())
+// app.use(passport.session())
+
 
 Router(app)
 
